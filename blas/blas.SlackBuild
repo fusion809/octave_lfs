@@ -66,10 +66,6 @@ rm -rf $SRCNAM-$VERSION
 wget -c https://github.com/Reference-LAPACK/lapack/archive/$VERSION.tar.gz
 tar xvf $CWD/$VERSION.tar.gz
 cd $SRCNAM-$VERSION
-
-# Allow building only the BLAS component.
-#patch -p1 < $CWD/patches/cmake-piecewise.diff
-
 # Avoid adding an RPATH entry to the shared lib.  It's unnecessary (except for
 # running the test suite), and it's broken on 64-bit (needs LIBDIRSUFFIX).
 mkdir -p shared

@@ -1,5 +1,8 @@
-*/lapack-*/*
-*/blas-*/*
-*/octave-*/*
-*/lzip-*/*
+#*/lapack-*/*
+#*/blas-*/*
+#*/octave-*/*
+#*/lzip-*/*
+*/*/*
+*.tgz
+tar xf $pkgname
 *.tar*

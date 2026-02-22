@@ -73,7 +73,7 @@ tar xvf $CWD/$VERSION.tar.gz
 cd $SRCNAM-${VERSION}
 
 # Allow building only the LAPACK component.
-patch -p1 < $CWD/patches/cmake-piecewise.diff || echo "Patching failed"
+patch -p1 < $CWD/cmake-piecewise.diff || echo "Patching failed"
 #patch -Np1 -i $CWD/patches/1094.patch
 
 if pkg-config --exists xblas; then
