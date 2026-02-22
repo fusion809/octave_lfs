@@ -3,6 +3,7 @@
 #*/octave-*/*
 #*/lzip-*/*
 */*/*
+octave-workspace
 *.tgz
 tar xf $pkgname
 *.tar*
