@@ -4,6 +4,7 @@
 #*/lzip-*/*
 */*/*
 octave-workspace
+*log
 *.tgz
 tar xf $pkgname
 *.tar*
