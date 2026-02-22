@@ -1,0 +1,5 @@
+*/lapack-*/*
+*/blas-*/*
+*/octave-*/*
+*/lzip-*/*
+*.tar*
