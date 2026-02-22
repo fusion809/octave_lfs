@@ -20,13 +20,11 @@ if ! which make &> /dev/null; then
 	echo "make not found and used as part of the build process."
 	exit
 fi
-wget -c https://github.com/miloyip/rapidjson/archive/v$pkgver/$pkgname-$pkgver.tar.gz
-wget -c https://github.com/Tencent/rapidjson/commit/3b2441b8.patch
-rm -rf $pkgname-$pkgver
-tar xf $pkgname-$pkgver.tar.gz
-cd $pkgname-$pkgver
+git clone https://github.com/Tencent/rapidjson
+#wget -c https://github.com/Tencent/rapidjson/commit/3b2441b8.patch
+cd $pkgname
 find -name CMakeLists.txt | xargs sed -e 's|-Werror||' -i # Don't use -Werror
-  patch -p1 -i ../3b2441b8.patch # Fix build with GCC 14
+  #patch -p1 -i ../3b2441b8.patch # Fix build with GCC 14
 mkdir -p build
   cd build
 
