@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# Slackware build script for LAPACK
+# Originally a Slackware build script for BLAS
+# Now a build script for LFS
 
-# Copyright 2014-2024 Kyle Guinn <elyk03@gmail.com>
+# Original author 2014-2024 Kyle Guinn <elyk03@gmail.com>
+# Maintainer Brenton Horne
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -24,11 +26,9 @@
 
 cd $(dirname $0) ; CWD=$(pwd)
 
-PRGNAM=lapack
+PRGNAM=blas
 SRCNAM=lapack
 VERSION=${VERSION:-c0c64400dae807bd7e3752456f57e346667dd963}
-BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
 
 if [ -z "$ARCH" ]; then
@@ -39,16 +39,7 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
-  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
-  exit 0
-fi
-
-TMP=${TMP:-/tmp/SBo}
-PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
-
-DOCS="LICENSE README.md DOCS/lapack.png DOCS/lawn81.tex DOCS/org2.ps"
+DOCS="LICENSE"
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
@@ -62,24 +53,14 @@ fi
 
 set -e
 
-if ! [[ -f /usr/lib/libblas.so ]]; then
-	echo "libblas.so not found in /usr/lib. You need BLAS installed first!"
+if ! which gfortran &> /dev/null; then
+	echo "GCC hasn't been built with Fortran support. This needs to be addressed!"
 	exit
 fi
-	
-wget -c https://github.com/Reference-LAPACK/lapack/archive/$VERSION.tar.gz
 rm -rf $SRCNAM-$VERSION
+wget -c https://github.com/Reference-LAPACK/lapack/archive/$VERSION.tar.gz
 tar xvf $CWD/$VERSION.tar.gz
-cd $SRCNAM-${VERSION}
-
-# Allow building only the LAPACK component.
-patch -p1 < $CWD/cmake-piecewise.diff || echo "Patching failed"
-#patch -Np1 -i $CWD/patches/1094.patch
-
-if pkg-config --exists xblas; then
-  use_xblas='-DUSE_XBLAS=ON'
-fi
-
+cd $SRCNAM-$VERSION
 # Avoid adding an RPATH entry to the shared lib.  It's unnecessary (except for
 # running the test suite), and it's broken on 64-bit (needs LIBDIRSUFFIX).
 mkdir -p shared
@@ -90,10 +71,7 @@ cd shared
     -DCMAKE_BUILD_TYPE=None \
     -DCMAKE_RULE_MESSAGES=OFF \
     -DCMAKE_VERBOSE_MAKEFILE=TRUE \
-    -DUSE_OPTIMIZED_BLAS=ON \
-    -DBUILD_LAPACK=ON \
-    -DBUILD_DEPRECATED=ON \
-    $use_xblas \
+    -DBUILD_BLAS=ON \
     -DBUILD_SHARED_LIBS=ON \
     -DCMAKE_SKIP_RPATH=YES \
     ..
@@ -113,15 +91,11 @@ if [ "${STATIC:-no}" != "no" ]; then
       -DCMAKE_BUILD_TYPE=None \
       -DCMAKE_RULE_MESSAGES=OFF \
       -DCMAKE_VERBOSE_MAKEFILE=TRUE \
-      -DUSE_OPTIMIZED_BLAS=ON \
-      -DBUILD_LAPACK=ON \
-      -DBUILD_DEPRECATED=ON \
-      $use_xblas \
+      -DBUILD_BLAS=ON \
       ..
     make -j$(nproc)
     sudo make install/strip DESTDIR=/
   cd ..
 fi
-
 sudo mkdir -p /usr/share/doc/$PRGNAM-$VERSION
 sudo cp -a $DOCS /usr/share/doc/$PRGNAM-$VERSION

@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Slackware build script for octave
-
-# Copyright 2012-2024 Kyle Guinn <elyk03@gmail.com>
+# Originally a Slackware build script for octave
+# Now LFS script for octave
+# Original author 2012-2024 Kyle Guinn <elyk03@gmail.com>
+# Maintainer Brenton Horne
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
